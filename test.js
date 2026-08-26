@@ -1,12 +1,27 @@
-import http from 'k6/http';
-import { sleep } from 'k6';
+import { browser } from 'k6/browser';
 
 export const options = {
-  vus: 20,           // 20 utilisateurs virtuels simultanés
-  duration: '5h45m',  // reste sous la limite de 6h de GitHub Actions
+  scenarios: {
+    ui: {
+      executor: 'constant-vus',
+      exec: 'browserTest',
+      vus: 20,
+      duration: '5h45m',
+      options: {
+        browser: {
+          type: 'chromium',
+        },
+      },
+    },
+  },
 };
 
-export default function () {
-  http.get('https://terterr.com');
-  sleep(1); // 1 seconde entre chaque requête par utilisateur virtuel
+export async function browserTest() {
+  const page = await browser.newPage();
+  try {
+    await page.goto('https://terterr.com/', { waitUntil: 'networkidle' });
+    await page.waitForTimeout(10000); // reste 10s sur la page avant de recommencer
+  } finally {
+    await page.close();
+  }
 }
