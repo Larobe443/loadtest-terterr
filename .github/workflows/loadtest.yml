@@ -20,5 +20,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install k6
 
-      - name: Run k6 test
-        run: k6 run test.js
+      - name: Install Chromium dependencies
+        run: |
+          sudo apt-get install -y \
+            libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 \
+            libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 \
+            libxfixes3 libxrandr2 libgbm1 libasound2 libpango-1.0-0 \
+            libpangocairo-1.0-0 fonts-liberation
+
+      - name: Run k6 browser test
+        run: K6_BROWSER_HEADLESS=true k6 run test.js
