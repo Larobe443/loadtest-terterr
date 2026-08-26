@@ -5,7 +5,7 @@ export const options = {
     ui: {
       executor: 'constant-vus',
       exec: 'browserTest',
-      vus: 4,
+      vus: 2,
       duration: '5h45m',
       options: {
         browser: {
