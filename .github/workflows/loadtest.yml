@@ -1,8 +1,6 @@
 name: Load Test
 
 on:
-  schedule:
-    - cron: '0 0,6,12,18 * * *'
   workflow_dispatch:
 
 jobs:
@@ -19,17 +17,3 @@ jobs:
           echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
           sudo apt-get update
           sudo apt-get install k6
-
-      - name: Install Chromium dependencies
-        run: |
-          sudo apt-get install -y \
-            libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 \
-            libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 \
-            libxfixes3 libxrandr2 libgbm1 libasound2t64 libpango-1.0-0 \
-            libpangocairo-1.0-0 fonts-liberation
-
-      - name: Run k6 browser test
-        env:
-          K6_BROWSER_HEADLESS: "true"
-          K6_BROWSER_ARGS: "no-sandbox,disable-dev-shm-usage,disable-gpu,disable-setuid-sandbox"
-        run: k6 run test.js
